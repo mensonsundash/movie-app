@@ -53,9 +53,9 @@ function addMovie() {
     displayMovies();
 
     //clear form inputs
-    title = '';
-    genre = '';
-    year = '';
+    document.getElementById('movieTitle').value = '';
+    document.getElementById('movieGenre').value = '';
+    document.getElementById('releaseYear').value = '';
 }
 
 function displayMovies(){
