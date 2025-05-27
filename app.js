@@ -13,6 +13,8 @@ class Movie {
 
 let movies = [];
 
+let editingIndex = -1;// -1 means not editing
+
 //load movies from localstorage when the page loads
 //using window.onload assigned with callback function
 window.onload = function () {
@@ -31,8 +33,8 @@ window.onload = function () {
 }
 
 function addMovie() {
-    let title = document.getElementById('movieTitle').value;
-    let genre = document.getElementById('movieGenre').value;
+    let title = document.getElementById('movieTitle').value.trim();
+    let genre = document.getElementById('movieGenre').value.trim();
     let year = parseInt(document.getElementById('releaseYear').value);
 
     //checking for empty fields
@@ -74,40 +76,23 @@ function displayMovies(){
         }
         //create delete button
         const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = "❌ Delete";
-        deleteBtn.style.marginLeft = "10px";
-        deleteBtn.style.padding = "10px 20px";
-        deleteBtn.style.backgroundColor = "transparent";
-        deleteBtn.style.color = "#F44336";
-        deleteBtn.style.border = "2px solid #F44336";
-        deleteBtn.style.borderRadius = "4px";
-        deleteBtn.style.cursor = "pointer";
-        deleteBtn.style.fontWeight = "bold";
-        
-        deleteBtn.onclick = function () {
-            deleteMovie(index);
-        };
+            deleteBtnStyle(deleteBtn);        
+          
+            deleteBtn.onclick = function () {
+                deleteMovie(index);
+            };
 
         //create edit button
         const editBtn = document.createElement('button');
-        editBtn.textContent = "✏️ Edit";
-        editBtn.style.marginLeft = "10px";
-        editBtn.style.padding = "10px 20px";
-        editBtn.style.backgroundColor = "transparent";
-        editBtn.style.color = "#4CAF50";
-        editBtn.style.border = "2px solid #4CAF50";
-        editBtn.style.borderRadius = "8px";
-        editBtn.style.cursor = "pointer";
-        editBtn.style.fontWeight = "bold";
-
-        editBtn.onclick = function() {
-            editMovie(index)
-        };
+            editBtnStyle(editBtn);
+            
+            editBtn.onclick = function() {
+                editMovie(index)
+            };
 
         
         li.appendChild(editBtn);
         li.appendChild(deleteBtn);
-        
         list.appendChild(li);
     });
 
@@ -117,6 +102,18 @@ function displayMovies(){
     // }
 }
 
+function deleteBtnStyle(deleteBtn){
+    deleteBtn.textContent = "❌ Delete";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.style.padding = "10px 20px";
+    deleteBtn.style.backgroundColor = "transparent";
+    deleteBtn.style.color = "#F44336";
+    deleteBtn.style.border = "2px solid #F44336";
+    deleteBtn.style.borderRadius = "4px";
+    deleteBtn.style.cursor = "pointer";
+    deleteBtn.style.fontWeight = "bold";
+}
+
 function deleteMovie(index)  {
     console.log("Delete val: ", index);
     movies.splice(index,1);
@@ -124,6 +121,61 @@ function deleteMovie(index)  {
     displayMovies();
 }
 
+function editBtnStyle(editBtn){
+    editBtn.textContent = "✏️ Edit";
+    editBtn.style.marginLeft = "10px";
+    editBtn.style.padding = "10px 20px";
+    editBtn.style.backgroundColor = "transparent";
+    editBtn.style.color = "#4CAF50";
+    editBtn.style.border = "2px solid #4CAF50";
+    editBtn.style.borderRadius = "8px";
+    editBtn.style.cursor = "pointer";
+    editBtn.style.fontWeight = "bold";
+}
+
 function editMovie(index) {
     console.log("Edit val: ", index);
+
+    const movie = movies[index];//retreive movies data array using its index
+
+    document.getElementById('movieTitle').value = movie.title;
+    document.getElementById('movieGenre').value = movie.genre;
+    document.getElementById('releaseYear').value  = movie.releaseYear;
+
+    editingIndex = index;
+
+    const addBtn = document.querySelector('button[onclick="addMovie()"]');
+    addBtn.textContent = "Update Movie";
+    addBtn.onclick = updateMovie;
+}
+
+function updateMovie() {
+    const title = document.getElementById('movieTitle').value.trim();
+    const genre = document.getElementById('movieGenre').value.trim();
+    const year = parseInt(document.getElementById('releaseYear').value);
+
+    if(!title || !genre || isNaN(year)) {
+        alert("Please fill in all fields correctly by Click update on list.");
+        return;
+    }
+
+    //update the selected movie
+    movies[editingIndex] = new Movie(title, genre, year);
+
+    //save and refresh
+    localStorage.setItem("movies", JSON.stringify(movies));
+    displayMovies();
+    //reset form
+    document.getElementById('movieTitle').value = '';
+    document.getElementById('movieGenre').value = '';
+    document.getElementById('releaseYear').value = '';
+
+    editingIndex = -1;
+
+    //restore add Movie button
+    const addBtn = document.querySelector('button[onclick="updateMovie()"]');
+
+    addBtn.textContent = "Add Movie";
+    addBtn.setAttribute("onclick", "addMovie()");
+
 }
