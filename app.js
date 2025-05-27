@@ -13,6 +13,23 @@ class Movie {
 
 let movies = [];
 
+//load movies from localstorage when the page loads
+//using window.onload assigned with callback function
+window.onload = function () {
+    const saved =  localStorage.getItem('movies');
+
+    if(saved){
+        
+        //Since JSON.parse() turns class instances into plain objects.Like this==> [{...}]
+        const parsed = JSON.parse(saved);
+        
+        //Thus we need to rebuild them into Movie objects using .map() like this==>[Movie] so .getInfo() works in displayMovies()
+        movies = parsed.map(m => new Movie(m.title, m.genre, m.releaseYear));
+        
+        displayMovies();
+    }
+}
+
 function addMovie() {
     let title = document.getElementById('movieTitle').value;
     let genre = document.getElementById('movieGenre').value;
@@ -29,6 +46,7 @@ function addMovie() {
     movies.push(newMovie);
 
     //saving your pushed data into locastorage
+    //as localStorage can only stores string, we need to stringify/parse using JSON 
     localStorage.setItem("movies", JSON.stringify(movies));
 
 
