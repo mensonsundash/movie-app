@@ -28,6 +28,10 @@ function addMovie() {
     const newMovie = new Movie(title, genre, year);
     movies.push(newMovie);
 
+    //saving your pushed data into locastorage
+    localStorage.setItem("movies", JSON.stringify(movies));
+
+
     displayMovies();
 
     //clear form inputs
