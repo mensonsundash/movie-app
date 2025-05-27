@@ -63,10 +63,67 @@ function displayMovies(){
     
     list.innerHTML = ''; //Clear old lines
 
-    for(let movie of movies) {
+    movies.forEach((movie, index) => {
         const li = document.createElement('li');
 
         li.textContent = movie.getInfo();
+        li.style.marginBottom = "10px";
+        li.style.padding = "10px 20px";
+        if(index%2 === 0) {
+            li.style.backgroundColor = "#D3D3D3";
+        }
+        //create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = "❌ Delete";
+        deleteBtn.style.marginLeft = "10px";
+        deleteBtn.style.padding = "10px 20px";
+        deleteBtn.style.backgroundColor = "transparent";
+        deleteBtn.style.color = "#F44336";
+        deleteBtn.style.border = "2px solid #F44336";
+        deleteBtn.style.borderRadius = "4px";
+        deleteBtn.style.cursor = "pointer";
+        deleteBtn.style.fontWeight = "bold";
+        
+        deleteBtn.onclick = function () {
+            deleteMovie(index);
+        };
+
+        //create edit button
+        const editBtn = document.createElement('button');
+        editBtn.textContent = "✏️ Edit";
+        editBtn.style.marginLeft = "10px";
+        editBtn.style.padding = "10px 20px";
+        editBtn.style.backgroundColor = "transparent";
+        editBtn.style.color = "#4CAF50";
+        editBtn.style.border = "2px solid #4CAF50";
+        editBtn.style.borderRadius = "8px";
+        editBtn.style.cursor = "pointer";
+        editBtn.style.fontWeight = "bold";
+
+        editBtn.onclick = function() {
+            editMovie(index)
+        };
+
+        
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+        
         list.appendChild(li);
-    }
+    });
+
+    // for(let movie of movies) {
+        
+
+    // }
+}
+
+function deleteMovie(index)  {
+    console.log("Delete val: ", index);
+    movies.splice(index,1);
+    localStorage.setItem("movies", JSON.stringify(movies)); //update storage
+    displayMovies();
+}
+
+function editMovie(index) {
+    console.log("Edit val: ", index);
 }
