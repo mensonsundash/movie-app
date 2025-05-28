@@ -7,12 +7,17 @@ class Movie {
     
 
     getInfo() {
+        // return `
+        // <div class="movie-details">
+        //     <strong>${this.title}</strong>
+        //     <span>${this.genre} | ${this.releaseYear}</span>
+        // </div>
+        // `;
         return `${this.title} is a ${this.genre} movie released in ${this.releaseYear}`;
     }
 }
 
 let movies = [];
-
 let editingIndex = -1;// -1 means not editing
 
 //load movies from localstorage when the page loads
@@ -60,59 +65,7 @@ function addMovie() {
     document.getElementById('releaseYear').value = '';
 }
 
-function displayMovies(){
-    const list = document.getElementById('movieList');
-    
-    list.innerHTML = ''; //Clear old lines
 
-    movies.forEach((movie, index) => {
-        const li = document.createElement('li');
-
-        li.textContent = movie.getInfo();
-        li.style.marginBottom = "10px";
-        li.style.padding = "10px 20px";
-        if(index%2 === 0) {
-            li.style.backgroundColor = "#D3D3D3";
-        }
-        //create delete button
-        const deleteBtn = document.createElement('button');
-            deleteBtnStyle(deleteBtn);        
-          
-            deleteBtn.onclick = function () {
-                deleteMovie(index);
-            };
-
-        //create edit button
-        const editBtn = document.createElement('button');
-            editBtnStyle(editBtn);
-            
-            editBtn.onclick = function() {
-                editMovie(index)
-            };
-
-        
-        li.appendChild(editBtn);
-        li.appendChild(deleteBtn);
-        list.appendChild(li);
-    });
-
-    // for(let movie of movies) {
-        
-
-    // }
-}
-
-function deleteBtnStyle(deleteBtn){
-    deleteBtn.textContent = "❌ Delete";
-    deleteBtn.style.marginLeft = "10px";
-    deleteBtn.style.padding = "10px 20px";
-    deleteBtn.style.backgroundColor = "transparent";
-    deleteBtn.style.color = "#F44336";
-    deleteBtn.style.border = "2px solid #F44336";
-    deleteBtn.style.borderRadius = "4px";
-    deleteBtn.style.cursor = "pointer";
-    deleteBtn.style.fontWeight = "bold";
-}
 
 function deleteMovie(index)  {
     console.log("Delete val: ", index);
@@ -121,21 +74,9 @@ function deleteMovie(index)  {
     displayMovies();
 }
 
-function editBtnStyle(editBtn){
-    editBtn.textContent = "✏️ Edit";
-    editBtn.style.marginLeft = "10px";
-    editBtn.style.padding = "10px 20px";
-    editBtn.style.backgroundColor = "transparent";
-    editBtn.style.color = "#4CAF50";
-    editBtn.style.border = "2px solid #4CAF50";
-    editBtn.style.borderRadius = "8px";
-    editBtn.style.cursor = "pointer";
-    editBtn.style.fontWeight = "bold";
-}
+
 
 function editMovie(index) {
-    console.log("Edit val: ", index);
-
     const movie = movies[index];//retreive movies data array using its index
 
     document.getElementById('movieTitle').value = movie.title;
@@ -177,5 +118,53 @@ function updateMovie() {
 
     addBtn.textContent = "Add Movie";
     addBtn.setAttribute("onclick", "addMovie()");
+
+}
+
+
+function displayMovies(){
+    const list = document.getElementById('movieList');
+    
+    list.innerHTML = ''; //Clear old lines
+
+
+    movies.forEach((movie, index) => {
+    
+        const li = document.createElement('li');
+        li.className = "movie-card";
+        if(index%2 === 0) {
+            li.style.backgroundColor = "#404040";
+        }
+        
+        const div1 = document.createElement('div');
+        div1.className = "movie-details";
+        div1.textContent = movie.getInfo();
+
+        const div2 = document.createElement('div');
+        div2.className = "movie-actions";
+
+        //create delete button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = "delete-button";
+        deleteBtn.textContent = "❌ Delete";
+        deleteBtn.onclick = function () {
+            deleteMovie(index);
+        };
+
+        //create edit button
+        const editBtn = document.createElement('button');
+        editBtn.className = "edit-button";
+        editBtn.textContent = "✏️ Edit";
+        editBtn.onclick = function() {
+            editMovie(index)
+        };
+        
+        li.appendChild(div1);
+            div2.appendChild(editBtn);
+            div2.appendChild(deleteBtn);
+        li.appendChild(div2);
+        
+        list.appendChild(li);
+    });
 
 }
