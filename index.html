@@ -16,6 +16,18 @@
     <button onclick="addMovie()">Add Movie</button>
 
     <input type="text" id="searchInput" placeholder="Search by title or genre" oninput="searchMovies()" style="padding: 10px; width: 300px; font-size: 16px; float: inline-end;">
+
+    <select id="genreFilter" onchange="filterByGenre()" style="padding: 10px; font-size: 16px; float: inline-end; margin-right: 10px;">
+        <option value="All">All</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Action">Action</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Sci-Fci">Sci-Fci</option>
+        <option value="War">War</option>
+        <option value="KungFu-action">KunFu-action</option>
+        <option value="Kun-fu">Kun-fu</option>
+    </select>
+
     <hr/>
     
 

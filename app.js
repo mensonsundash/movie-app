@@ -63,6 +63,9 @@ function addMovie() {
     document.getElementById('movieTitle').value = '';
     document.getElementById('movieGenre').value = '';
     document.getElementById('releaseYear').value = '';
+
+    //clearing filter selection to ALL
+    document.getElementById('genreFilter').value = 'all';
 }
 
 
@@ -110,6 +113,9 @@ function updateMovie() {
     document.getElementById('movieTitle').value = '';
     document.getElementById('movieGenre').value = '';
     document.getElementById('releaseYear').value = '';
+
+    //clearing filter selection to ALL
+    document.getElementById('genreFilter').value = 'all';
 
     editingIndex = -1;
 
@@ -172,12 +178,26 @@ function displayMovies(movieArray = movies){
 //function to search movies
 function searchMovies() {
     
-    const query = document.getElementById('searchInput').value.toLowerCase();
+    const querySearch = document.getElementById('searchInput').value.toLowerCase();
 
     
-    const filtered = movies.filter(movie => movie.title.toLowerCase().includes(query) || movie.genre.toLowerCase().includes(query));
+    const filtered = movies.filter(movie => movie.title.toLowerCase().includes(querySearch) || movie.genre.toLowerCase().includes(querySearch));
 
     console.log(filtered)
 
+    displayMovies(filtered);
+}
+
+//function to filater by dropdown selection
+function filterByGenre() {
+    const selectedGenre = document.getElementById('genreFilter').value.toLowerCase();
+
+    if(selectedGenre === "all"){
+        displayMovies();
+        return;
+
+    }
+
+    const filtered = movies.filter(movie => movie.genre.toLowerCase().includes(selectedGenre));
     displayMovies(filtered);
 }
