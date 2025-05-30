@@ -121,14 +121,14 @@ function updateMovie() {
 
 }
 
-
-function displayMovies(){
+//function with accpeting an optional array (for filtering)
+function displayMovies(movieArray = movies){
     const list = document.getElementById('movieList');
     
     list.innerHTML = ''; //Clear old lines
 
 
-    movies.forEach((movie, index) => {
+    movieArray.forEach((movie, index) => {
     
         const li = document.createElement('li');
         li.className = "movie-card";
@@ -167,4 +167,17 @@ function displayMovies(){
         list.appendChild(li);
     });
 
+}
+
+//function to search movies
+function searchMovies() {
+    
+    const query = document.getElementById('searchInput').value.toLowerCase();
+
+    
+    const filtered = movies.filter(movie => movie.title.toLowerCase().includes(query) || movie.genre.toLowerCase().includes(query));
+
+    console.log(filtered)
+
+    displayMovies(filtered);
 }
