@@ -147,6 +147,14 @@ function displayMovies(movieArray = movies){
     console.log("averageRating: -->", averageRating)
     console.log("toprated: -->", topRated)
 
+    let moviesAnalytics = createMovieAnalytics(movies);
+
+    console.log("Movie Analytics AverageRating: ", moviesAnalytics.getAverageRating());
+    console.log("Movie Analytics Top Rated: ", moviesAnalytics.getTopRatedMovie())
+    console.log("Movie Analytics Oldest: ", moviesAnalytics.getOldestMovie())
+    console.log("Movie Analytics By Genre: ", moviesAnalytics.getMoviesByGenre('action'))
+
+
     movieArray.forEach((movie, index) => {
     
         const li = document.createElement('li');
@@ -260,8 +268,9 @@ function getOldestMovie(movies) {
 function getAverageRating(movies) {
     
     let totalRating = parseFloat(0);
-
     const movieCount = movies.length;
+
+    if(!movieCount) return 0;
 
     movies.forEach((movie) => {
         totalRating += parseFloat(movie.rating);
@@ -273,9 +282,43 @@ function getAverageRating(movies) {
     return averageRating;
 }
 
+//get movie with the highest rate
 function getTopRatedMovie(movies) {
     return movies.reduce((topRated, current) => {
         return current.rating >= topRated.rating ? current : topRated; 
     })
 }
 
+//returns an array of movie titles for the given genre
+function getMoviesByGenre(movies, genre, partial = false) {
+    if(!Array.isArray(movies) || !genre) return [];
+
+    const inputGenre = genre.toLowerCase();
+
+    return movies.filter(movie => {
+        const movieGenre = movie.genre.toLowerCase();
+
+        return partial ? movieGenre.includes(inputGenre) : movieGenre === inputGenre;
+    }).map(movie => movie.title);
+}
+
+
+
+function createMovieAnalytics(movies) {
+    const movieAnalyticsObject = {
+        getAverageRating: function () {
+            return getAverageRating(movies)
+        },
+        getTopRatedMovie: function () {
+            return getTopRatedMovie(movies)
+        },
+        getOldestMovie: function () {
+            return getOldestMovie(movies);
+        },
+        getMoviesByGenre: function (genre, partial = false) {
+            return getMoviesByGenre(movies, genre, partial);
+        }
+    }
+
+    return movieAnalyticsObject;
+}
